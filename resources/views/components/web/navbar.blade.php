@@ -5,17 +5,20 @@
     $links = [
         ['label' => 'Beranda', 'href' => route('home'), 'active' => request()->routeIs('home'), 'mega' => false],
         ['label' => 'Layanan', 'href' => url('/layanan'), 'active' => request()->is('layanan*'), 'mega' => true],
-        ['label' => 'Tentang', 'href' => url('/tentang-kami'), 'active' => request()->is('tentang-kami*'), 'mega' => false],
+        ['label' => 'Tentang', 'href' => route('about'), 'active' => request()->is('tentang-kami*'), 'mega' => false],
         ['label' => 'Galeri', 'href' => route('galleries.index'), 'active' => request()->is('galeri*'), 'mega' => false],
     ];
 
-    $contactUrl = url('/tentang-kami#kontak');
+    $contactUrl = route('about').'#kontak';
 
     $focus = 'outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gold-500';
     $lineBase = 'pointer-events-none absolute h-0.5 origin-left transition-transform duration-300 ease-out';
 @endphp
 
-<header x-data="navbar" :data-solid="solid" data-solid="false" @scroll.window.passive="sync()" @resize.window="closeOnDesktop()" @keydown.escape.window="close()" class="group/nav solid:border-gold-300/70 solid:bg-white solid:text-ink fixed inset-x-0 top-0 z-50 border-b border-transparent text-white transition-colors duration-300">
+<header x-data="navbar" :data-solid="solid" data-solid="false" @scroll.window.passive="sync()" @resize.window="closeOnDesktop()" @keydown.escape.window="close()" class="group/nav solid:border-gold-300/70 solid:bg-white solid:text-ink fixed inset-x-0 top-0 z-50 border-b border-transparent text-white [text-shadow:0_1px_8px_rgb(0_0_0/0.55)] solid:[text-shadow:none] transition-colors duration-300">
+
+    {{-- Bayangan gelap di belakang navbar transparan agar menu tetap terbaca di atas foto terang; hilang saat navbar solid. --}}
+    <div class="group-solid/nav:opacity-0 pointer-events-none absolute inset-x-0 top-0 -z-10 h-28 bg-linear-to-b from-ink/90 via-ink/55 to-transparent transition-opacity duration-300" aria-hidden="true"></div>
 
     {{-- Bar utama --}}
     <div>
@@ -41,7 +44,7 @@
                     @foreach ($links as $link)
                         <li class="group/item flex h-full items-center">
                             <a href="{{ $link['href'] }}" @if ($link['active']) aria-current="page" @endif
-                               class="relative inline-flex items-center px-4 py-1.5 text-[15px] font-medium {{ $focus }}">
+                               class="relative inline-flex items-center px-4 py-1.5 text-[15px] font-semibold {{ $focus }}">
                                 {{ $link['label'] }}
                                 @if ($link['mega'])
                                     <svg class="ml-1.5 size-4 transition-transform duration-300 group-hover/item:rotate-180 group-focus-within/item:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>

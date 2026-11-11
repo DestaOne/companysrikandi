@@ -3,27 +3,26 @@
 @section('title', 'Galeri | '.config('company.name'))
 
 @section('content')
-    <main class="mx-auto max-w-7xl px-4 pb-20 pt-28 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Galeri</h1>
+    <main>
+        <x-web.hero-banner split :title="$gallery['hero']['title']" :description="$gallery['hero']['description']" :image="$gallery['hero']['image']" />
 
-        @if ($galleries->isEmpty())
-            <p class="mt-8 text-ink-800">Galeri belum tersedia.</p>
-        @else
-            <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach ($galleries as $gallery)
-                    <figure class="overflow-hidden rounded-xl bg-white shadow ring-1 ring-gold-300/60">
-                        <img src="{{ asset('storage/'.$gallery->image) }}" alt="{{ $gallery->title }}" loading="lazy" class="aspect-[4/3] w-full object-cover">
-                        <figcaption class="p-4">
-                            <p class="font-semibold">{{ $gallery->title }}</p>
-                            @if ($gallery->description)
-                                <p class="mt-1 line-clamp-2 text-sm text-ink-800">{{ $gallery->description }}</p>
-                            @endif
-                        </figcaption>
-                    </figure>
-                @endforeach
+        <section class="relative overflow-hidden bg-white py-16 md:py-24">
+            <div class="absolute -right-24 top-10 size-72 rounded-full border border-gold-300/50"></div>
+            <div class="absolute -right-12 top-22 size-72 rounded-full border border-gold-300/30"></div>
+
+            <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                @if ($galleries->isEmpty())
+                    <p class="text-center text-ink-800">{{ $gallery['empty'] }}</p>
+                @else
+                    <div class="grid auto-rows-[9rem] grid-flow-dense grid-cols-2 gap-3 sm:auto-rows-[12rem] sm:gap-4 lg:grid-cols-4">
+                        @foreach ($galleries as $item)
+                            <x-web.gallery-tile :index="$loop->index" :image="asset('storage/'.$item->image)" :title="$item->title" :description="$item->description" />
+                        @endforeach
+                    </div>
+
+                    <div class="mt-10">{{ $galleries->links() }}</div>
+                @endif
             </div>
-
-            <div class="mt-8">{{ $galleries->links() }}</div>
-        @endif
+        </section>
     </main>
 @endsection

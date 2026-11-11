@@ -39,3 +39,51 @@
 [x-cloak] {
     display: none !important;
 }
+
+/* Gelombang dekoratif bergeser pelan; dimatikan bagi pengguna yang memilih gerakan minimal. */
+@keyframes wave-drift {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@utility animate-wave {
+    animation: wave-drift 28s linear infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}
+
+/* Hero split: panel gelap membuka dari menutup penuh ke bentuk miring di kiri (hanya layar lebar). */
+@keyframes hero-open {
+    from {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+}
+
+@keyframes hero-rise {
+    from {
+        opacity: 0;
+        transform: translateY(1.5rem);
+    }
+}
+
+@utility hero-panel {
+    @media (min-width: 64rem) {
+        clip-path: polygon(0 0, 62% 0, 50% 100%, 0 100%);
+        animation: hero-open 0.8s cubic-bezier(0.77, 0, 0.18, 1) 0.15s both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}
+
+@utility hero-rise {
+    animation: hero-rise 0.5s ease-out 0.25s both;
+
+    @media (prefers-reduced-motion: reduce) {
+        animation: none;
+    }
+}

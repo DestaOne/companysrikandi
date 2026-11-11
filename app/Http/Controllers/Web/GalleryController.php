@@ -13,7 +13,8 @@ class GalleryController extends Controller
     public function index(): View
     {
         return view('web.galleries.index', [
-            'galleries' => $this->galleryService->paginate(12),
+            'galleries' => $this->galleryService->paginate(14), // kelipatan 7, sesuai pola petak
+            'gallery' => config('gallery'),
         ]);
     }
 }

@@ -20,5 +20,7 @@
 
     <x-web.footer />
 
+    <x-ui.image-viewer />
+
 </body>
 </html>

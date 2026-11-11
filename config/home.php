@@ -46,7 +46,7 @@ return [
         ],
     ],
 
-    // Tiga keunggulan: kartu pertama tampil lebar di atas, dua lainnya berdampingan di bawahnya.
+    // Empat keunggulan: panel foto yang melebar saat di-hover; panel pertama terbuka lebih dulu.
     'features' => [
         'eyebrow' => 'Keunggulan',
         'title' => 'Mengapa Memilih Kami',
@@ -65,6 +65,11 @@ return [
                 'title' => 'Mitra yang Responsif',
                 'description' => 'Tim kami mudah dihubungi dan siap membantu kebutuhan pemesanan Anda.',
                 'image' => 'images/home/keunggulan-mitra.jpg',
+            ],
+            [
+                'title' => 'Pengiriman Tepat Waktu',
+                'description' => 'Armada dan jaringan distribusi kami memastikan barang sampai sesuai jadwal yang disepakati.',
+                'image' => 'images/home/keunggulan-pengiriman.jpg',
             ],
         ],
     ],

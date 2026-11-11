@@ -40,43 +40,33 @@ class HomeTest extends TestCase
         $response->assertSee(url('/layanan'), false);
     }
 
-    public function test_service_carousel_has_four_services_and_a_see_more_card(): void
+    public function test_service_coverflow_has_four_services_and_a_see_more_card(): void
     {
         $this->assertCount(4, config('home.services.items'));
 
         $this->get(route('home'))
             ->assertSee('aria-roledescription="carousel"', false)
+            ->assertSee('x-data="coverflow(5)"', false)
             ->assertSee('aria-label="Layanan sebelumnya"', false)
             ->assertSee('aria-label="Layanan berikutnya"', false)
-            ->assertSee('Layanan sebelumnya')
-            ->assertSee('Layanan berikutnya')
-            ->assertSee('Lihat Selengkapnya');
+            ->assertSee('Lihat Layanan Selengkapnya');
     }
 
-    public function test_carousel_duplicates_are_hidden_from_assistive_tech_and_tab_order(): void
-    {
-        $html = $this->get(route('home'))->getContent();
-
-        $this->assertSame(8, substr_count($html, 'class="flex flex-none gap-6 pr-6"'));
-        $this->assertSame(7, preg_match_all('/class="flex flex-none gap-6 pr-6"\s+aria-hidden="true"/', $html));
-        $this->assertStringContainsString('tabindex="-1"', $html);
-    }
-
-    public function test_home_shows_three_features_in_order(): void
+    public function test_home_shows_four_features_in_order(): void
     {
         $features = config('home.features.items');
 
-        $this->assertCount(3, $features);
+        $this->assertCount(4, $features);
 
         $this->get(route('home'))
             ->assertSeeInOrder(array_column($features, 'title'))
-            ->assertSee('md:col-span-2', false);
+            ->assertSee('x-data="{ active: 0 }"', false);
     }
 
     public function test_home_ends_with_call_to_action(): void
     {
         $this->get(route('home'))
-            ->assertSeeInOrder([config('home.features.items.2.title'), config('home.cta.title'), '<footer'], false)
+            ->assertSeeInOrder([config('home.features.items.3.title'), config('home.cta.title'), '<footer'], false)
             ->assertSee(url('/tentang-kami#kontak'), false);
     }
 
