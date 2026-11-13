@@ -19,4 +19,19 @@ class ServiceTest extends TestCase
     {
         $this->assertSame(url('/layanan'), route('services'));
     }
+
+    public function test_service_detail_shows_title_and_products(): void
+    {
+        $service = config('service.items.0');
+
+        $this->get(route('services.show', $service['slug']))
+            ->assertOk()
+            ->assertSee($service['title'])
+            ->assertSee($service['products'][0]);
+    }
+
+    public function test_unknown_service_returns_not_found(): void
+    {
+        $this->get('/layanan/tidak-ada')->assertNotFound();
+    }
 }

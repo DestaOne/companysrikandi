@@ -114,4 +114,33 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Pembatasan Login
+    |--------------------------------------------------------------------------
+    |
+    | Setelah salah sebanyak max_attempts kali, tombol login dikunci selama
+    | lockout_seconds detik. Nilai sementara 3 detik, nanti akan diubah.
+    |
+    */
+
+    'login_throttle' => [
+        'max_attempts' => 3,
+        'lockout_seconds' => 3,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Logout Otomatis Panel Admin
+    |--------------------------------------------------------------------------
+    |
+    | Admin otomatis keluar bila tidak ada aktivitas (gerak mouse, klik,
+    | ketik, scroll) selama idle_timeout detik (1200 = 20 menit). Tidak
+    | berlaku bila admin login dengan "Ingat saya". Batas di luar tab
+    | mengikuti SESSION_LIFETIME (120 menit).
+    |
+    */
+
+    'idle_timeout' => 1200,
+
 ];

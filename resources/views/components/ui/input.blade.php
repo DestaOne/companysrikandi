@@ -1,8 +1,8 @@
-{{-- Props: name (wajib), label, type, value --}}
-@props(['name', 'label' => null, 'type' => 'text', 'value' => ''])
+{{-- Props: name (wajib), label, type, value, size (md|lg) --}}
+@props(['name', 'label' => null, 'type' => 'text', 'value' => '', 'size' => 'md'])
 
 @php
-    $field = 'block w-full rounded-md border-0 px-3 py-2 text-sm text-ink ring-1 ring-gold-300 outline-none focus:ring-2 focus:ring-gold-500';
+    $field = 'block w-full border-0 bg-white px-3 text-sm text-ink ring-1 ring-gold-300 outline-none focus:ring-2 focus:ring-gold-500 '.($size === 'lg' ? 'rounded-lg py-3' : 'rounded-md py-2');
 @endphp
 
 <div class="space-y-1.5">

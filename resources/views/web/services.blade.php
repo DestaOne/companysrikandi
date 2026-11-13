@@ -16,7 +16,7 @@
                     <span class="bg-gold-metal mx-auto mt-5 block h-0.5 w-16"></span>
                 </div>
 
-                {{-- Selang-seling: ganjil gambar di kiri, genap gambar di kanan; "Lihat Detail" membuka pratinjau gambar --}}
+                {{-- Selang-seling: ganjil gambar di kiri, genap gambar di kanan; "Lihat Detail" menuju halaman detail; gambar tetap bisa di-zoom --}}
                 <div class="mt-16 space-y-20 md:space-y-32">
                     @foreach ($page['items'] as $service)
                         <article x-data class="grid overflow-hidden lg:w-[86%] {{ $loop->odd ? ['lg:ml-0', 'lg:ml-16', 'lg:ml-6', 'lg:ml-24'][intdiv($loop->index, 2) % 4] : ['lg:ml-auto lg:mr-10', 'lg:ml-auto lg:mr-0', 'lg:ml-auto lg:mr-20'][intdiv($loop->index, 2) % 3] }} border border-gold-300 border-t-4 border-t-gold-500 bg-white shadow-md lg:grid-cols-2">
@@ -28,15 +28,14 @@
                             </div>
 
                             <div class="flex flex-col justify-center p-6 sm:p-10">
-                                <h3 class="text-balance text-xl font-semibold tracking-tight sm:text-2xl">{{ $service['title'] }}</h3>
+                                <h3 class="text-balance text-2xl font-semibold tracking-tight sm:text-3xl">{{ $service['title'] }}</h3>
                                 <span class="bg-gold-metal mt-5 block h-0.5 w-16"></span>
                                 <p class="mt-5 text-base leading-8 text-ink-800">{{ $service['description'] }}</p>
-                                <button type="button"
-                                        @click="$dispatch('open-image', { src: @js(asset($service['image'])), title: @js($service['title']) })"
-                                        class="group/detail mt-6 inline-flex items-center gap-2 self-start text-sm font-semibold text-ink hover:text-gold-700">
+                                <a href="{{ route('services.show', $service['slug']) }}"
+                                   class="group/detail mt-6 inline-flex items-center gap-3 self-start text-lg font-semibold text-ink hover:text-gold-700">
                                     Lihat Detail
-                                    <svg class="size-4 transition-transform group-hover/detail:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                                </button>
+                                    <svg class="size-6 transition-transform group-hover/detail:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                                </a>
                             </div>
                         </article>
                     @endforeach

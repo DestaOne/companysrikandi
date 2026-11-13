@@ -70,32 +70,32 @@
         <section id="kontak" class="scroll-mt-20 bg-white py-16 md:py-24">
             <div class="mx-auto grid max-w-7xl gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-16 lg:px-8">
                 <div>
-                    <p class="text-sm font-semibold uppercase tracking-widest text-gold-700">{{ $about['contact']['eyebrow'] }}</p>
-                    <h2 class="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{{ $about['contact']['title'] }}</h2>
+                    <p class="text-base font-semibold uppercase tracking-widest text-gold-700">{{ $about['contact']['eyebrow'] }}</p>
+                    <h2 class="mt-3 text-4xl font-semibold tracking-tight sm:text-5xl">{{ $about['contact']['title'] }}</h2>
                     <span class="bg-gold-metal mt-5 block h-0.5 w-16"></span>
-                    <p class="mt-6 text-base leading-8 text-ink-800">{{ $about['contact']['description'] }}</p>
+                    <p class="mt-6 text-lg leading-8 text-ink-800">{{ $about['contact']['description'] }}</p>
 
-                    <dl class="mt-8 space-y-6 text-sm">
+                    <dl class="mt-10 space-y-7 text-base">
                         <div class="flex gap-4">
-                            <dt class="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-50 text-gold-700 ring-1 ring-gold-300">
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                            <dt class="flex size-12 shrink-0 items-center justify-center rounded-full bg-gold-50 text-gold-700 ring-1 ring-gold-300">
+                                <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
                                 <span class="sr-only">Alamat</span>
                             </dt>
-                            <dd class="leading-7 text-ink-800">{{ config('company.address') }}</dd>
+                            <dd class="text-lg leading-8 text-ink-800">{{ config('company.address') }}</dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-50 text-gold-700 ring-1 ring-gold-300">
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>
+                            <dt class="flex size-12 shrink-0 items-center justify-center rounded-full bg-gold-50 text-gold-700 ring-1 ring-gold-300">
+                                <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>
                                 <span class="sr-only">Telepon</span>
                             </dt>
-                            <dd class="leading-10 text-ink-800"><a href="tel:{{ config('company.phone') }}" class="hover:text-gold-700">{{ config('company.phone') }}</a></dd>
+                            <dd class="text-lg leading-12 text-ink-800"><a href="tel:{{ config('company.phone') }}" class="hover:text-gold-700">{{ config('company.phone') }}</a></dd>
                         </div>
                         <div class="flex gap-4">
-                            <dt class="flex size-10 shrink-0 items-center justify-center rounded-full bg-gold-50 text-gold-700 ring-1 ring-gold-300">
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                            <dt class="flex size-12 shrink-0 items-center justify-center rounded-full bg-gold-50 text-gold-700 ring-1 ring-gold-300">
+                                <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
                                 <span class="sr-only">Email</span>
                             </dt>
-                            <dd class="break-all leading-10 text-ink-800"><a href="mailto:{{ config('company.email') }}" class="hover:text-gold-700">{{ config('company.email') }}</a></dd>
+                            <dd class="break-all text-lg leading-12 text-ink-800"><a href="mailto:{{ config('company.email') }}" class="hover:text-gold-700">{{ config('company.email') }}</a></dd>
                         </div>
                     </dl>
                 </div>
@@ -113,7 +113,5 @@
                 </form>
             </div>
         </section>
-
-        <x-web.cta-banner :title="$about['cta']['title']" :description="$about['cta']['description']" :image="$about['cta']['image']" :href="route('about').'#kontak'" :label="$about['cta']['label']" />
     </main>
 @endsection

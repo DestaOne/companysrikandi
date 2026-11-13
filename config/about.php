@@ -44,14 +44,6 @@ return [
         ],
     ],
 
-    // Tombol mengarah ke form kontak di halaman ini.
-    'cta' => [
-        'title' => 'Siap Bekerja Sama dengan Kami?',
-        'description' => 'Sampaikan kebutuhan Anda lewat form pesan, tim kami akan segera menghubungi Anda.',
-        'label' => 'Hubungi Kami',
-        'image' => 'images/home/cta.jpg',
-    ],
-
     'contact' => [
         'eyebrow' => 'Kontak',
         'title' => 'Hubungi Kami',
