@@ -2,10 +2,21 @@
 
 namespace Tests\Feature;
 
+use Database\Seeders\ServiceSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ServiceTest extends TestCase
 {
+    use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(ServiceSeeder::class);
+    }
+
     public function test_service_page_lists_all_services(): void
     {
         $response = $this->get(route('services'))->assertOk();

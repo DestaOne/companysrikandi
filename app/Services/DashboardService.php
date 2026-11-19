@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\ActivityLog;
 use App\Models\ContactMessage;
 use App\Models\Gallery;
+use App\Models\Service;
 use Illuminate\Database\Eloquent\Collection;
 
 class DashboardService
@@ -12,13 +12,13 @@ class DashboardService
     public function __construct(private ServiceCatalogService $serviceCatalogService) {}
 
     /**
-     * @return array{services: int, galleries: int, unread_messages: int}
+     * @return array{services: int, draft_services: int, galleries: int, unread_messages: int}
      */
     public function counts(): array
     {
         return [
-            // Layanan masih dari config sampai ada modul admin-nya
-            'services' => count($this->serviceCatalogService->page()['items']),
+            'services' => $this->serviceCatalogService->count(),
+            'draft_services' => $this->serviceCatalogService->draftCount(),
             'galleries' => Gallery::count(),
             'unread_messages' => ContactMessage::unread()->count(),
         ];
@@ -27,16 +27,16 @@ class DashboardService
     /**
      * @return Collection<int, ContactMessage>
      */
-    public function recentMessages(int $limit = 5): Collection
+    public function recentMessages(int $limit = 30): Collection
     {
         return ContactMessage::latest()->limit($limit)->get();
     }
 
     /**
-     * @return Collection<int, ActivityLog>
+     * @return Collection<int, Service>
      */
-    public function recentActivities(int $limit = 6): Collection
+    public function draftServices(int $limit = 30): Collection
     {
-        return ActivityLog::with('user')->latest()->limit($limit)->get();
+        return $this->serviceCatalogService->drafts($limit);
     }
 }

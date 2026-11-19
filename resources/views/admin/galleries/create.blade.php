@@ -3,9 +3,9 @@
 @section('title', 'Tambah Galeri')
 
 @section('content')
-    <x-admin.page-header title="Tambah Galeri" />
+    <x-admin.page-header title="Tambah Galeri" :back="route('admin.galleries.index')" />
 
-    <form method="POST" action="{{ route('admin.galleries.store') }}" enctype="multipart/form-data" class="max-w-xl">
+    <x-admin.form :action="route('admin.galleries.store')" :cancel="route('admin.galleries.index')">
         @include('admin.galleries._form')
-    </form>
+    </x-admin.form>
 @endsection

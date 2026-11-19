@@ -2,10 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\Service;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class HomeTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_home_shows_hero_with_title_and_description(): void
     {
         config([
@@ -31,10 +35,12 @@ class HomeTest extends TestCase
 
     public function test_home_lists_services_with_link_to_all_services(): void
     {
+        $services = Service::factory()->count(4)->create();
+
         $response = $this->get(route('home'));
 
-        foreach (config('home.services.items') as $service) {
-            $response->assertSee($service['title'])->assertSee($service['image'], false);
+        foreach ($services as $service) {
+            $response->assertSee($service->title)->assertSee($service->image, false);
         }
 
         $response->assertSee(url('/layanan'), false);
@@ -42,11 +48,11 @@ class HomeTest extends TestCase
 
     public function test_service_coverflow_has_four_services_and_a_see_more_card(): void
     {
-        $this->assertCount(4, config('home.services.items'));
+        Service::factory()->count(4)->create();
 
         $this->get(route('home'))
             ->assertSee('aria-roledescription="carousel"', false)
-            ->assertSee('x-data="coverflow(5)"', false)
+            ->assertSee('x-data="coverflow(5, true)"', false)
             ->assertSee('aria-label="Layanan sebelumnya"', false)
             ->assertSee('aria-label="Layanan berikutnya"', false)
             ->assertSee('Lihat Layanan Selengkapnya');
@@ -75,12 +81,19 @@ class HomeTest extends TestCase
         $paths = [
             config('home.hero.image'),
             config('home.cta.image'),
-            ...array_column(config('home.services.items'), 'image'),
             ...array_column(config('home.features.items'), 'image'),
         ];
 
         foreach ($paths as $path) {
             $this->assertFileExists(public_path($path));
         }
+    }
+
+    public function test_services_and_features_sections_have_line_and_root_decoration(): void
+    {
+        $html = $this->get(route('home'))->assertOk()->getContent();
+
+        // Satu hiasan garis dan akar untuk bagian Layanan, satu untuk bagian Keunggulan
+        $this->assertSame(2, substr_count($html, 'vector-effect="non-scaling-stroke" d="M500 0 C380 180'));
     }
 }

@@ -1,5 +1,6 @@
 // Perilaku carousel coverflow: satu kartu aktif di tengah, kartu lain miring di kiri dan kanan.
-export default (count) => ({
+// autoplay=false dipakai untuk pratinjau statis di admin.
+export default (count, autoplay = true) => ({
     active: 0,
     timer: null,
 
@@ -45,7 +46,7 @@ export default (count) => ({
     },
 
     play() {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        if (!autoplay || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             return;
         }
 

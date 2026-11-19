@@ -15,7 +15,7 @@ class DashboardController extends Controller
         return view('admin.dashboard', [
             'counts' => $this->dashboardService->counts(),
             'messages' => $this->dashboardService->recentMessages(),
-            'activities' => $this->dashboardService->recentActivities(),
+            'draftServices' => $this->dashboardService->draftServices(),
         ]);
     }
 }

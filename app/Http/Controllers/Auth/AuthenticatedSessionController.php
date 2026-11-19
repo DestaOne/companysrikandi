@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
         // Penanda sesi "ingat saya"; hilang sendiri saat logout karena sesi dihapus
         $request->session()->put('remember_me', $request->boolean('remember'));
 
-        return redirect()->intended(route('admin.dashboard'));
+        return redirect()->route('admin.dashboard');
     }
 
     public function destroy(Request $request): RedirectResponse

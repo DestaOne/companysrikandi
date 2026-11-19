@@ -39,11 +39,13 @@ class GallerySeeder extends Seeder
             return;
         }
 
+        $order = 0;
+
         foreach (self::PHOTOS as $file => [$title, $description]) {
             $path = "galleries/{$file}.jpg";
             Storage::disk('public')->put($path, file_get_contents(__DIR__."/images/galleries/{$file}.jpg"));
 
-            Gallery::create(['title' => $title, 'description' => $description, 'image' => $path]);
+            Gallery::create(['title' => $title, 'description' => $description, 'image' => $path, 'sort_order' => ++$order]);
         }
     }
 }

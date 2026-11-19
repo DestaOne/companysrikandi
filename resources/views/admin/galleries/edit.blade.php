@@ -3,10 +3,9 @@
 @section('title', 'Ubah Galeri')
 
 @section('content')
-    <x-admin.page-header title="Ubah Galeri" />
+    <x-admin.page-header title="Ubah Galeri" :back="route('admin.galleries.index')" />
 
-    <form method="POST" action="{{ route('admin.galleries.update', $gallery) }}" enctype="multipart/form-data" class="max-w-xl">
-        @method('PUT')
+    <x-admin.form :action="route('admin.galleries.update', $gallery)" method="PUT" :cancel="route('admin.galleries.index')">
         @include('admin.galleries._form')
-    </form>
+    </x-admin.form>
 @endsection

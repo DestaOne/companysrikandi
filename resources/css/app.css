@@ -88,3 +88,68 @@
         animation: none;
     }
 }
+
+/* Pratinjau di admin: semua animasi dan transisi di dalamnya dimatikan. */
+@utility no-motion {
+    & * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Popup notifikasi (x-ui.flash-message): kartu muncul membesar, ikon centang/silang tergambar. */
+@keyframes pop-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes draw-stroke {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@utility animate-pop {
+    animation: pop-in 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+
+/* Garis digambar bertahap; pathLength="1" pada elemen SVG membuat panjang garis seragam. */
+@utility draw-stroke {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: draw-stroke 0.45s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-pop {
+        animation: none;
+    }
+
+    .draw-stroke {
+        animation: none;
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Scrollbar garis putih setipis 2px (Chrome/Edge/Safari); Firefox tidak bisa lebih tipis dari "thin" */
+.scrollbar-hairline::-webkit-scrollbar {
+    width: 2px;
+}
+
+.scrollbar-hairline::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background: rgb(255 255 255 / 0.5);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+    .scrollbar-hairline {
+        scrollbar-width: thin;
+        scrollbar-color: rgb(255 255 255 / 0.5) transparent;
+    }
+}

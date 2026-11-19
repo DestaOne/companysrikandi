@@ -11,6 +11,12 @@ class StoreContactMessageRequest extends FormRequest
         return true; // form kontak terbuka untuk pengunjung
     }
 
+    /** Saat validasi gagal, kembali ke form (bukan ke atas halaman) agar pesan error langsung terlihat. */
+    protected function getRedirectUrl(): string
+    {
+        return route('about').'#kontak';
+    }
+
     /**
      * @return array<string, array<int, string>>
      */

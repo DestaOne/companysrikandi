@@ -17,7 +17,7 @@ class ServiceController extends Controller
 
     public function show(string $slug): View
     {
-        $service = $this->serviceCatalogService->findBySlug($slug) ?? abort(404);
+        $service = $this->serviceCatalogService->findPublishedBySlug($slug) ?? abort(404);
 
         return view('web.service-detail', [
             'service' => $service,

@@ -2,10 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Models\Service;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class NavbarTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_navbar_shows_logo_menu_and_contact_button(): void
     {
         $this->get(route('home'))
@@ -29,15 +33,21 @@ class NavbarTest extends TestCase
             ->assertSee('aria-current="page"', false);
     }
 
-    public function test_service_menu_lists_company_services(): void
+    public function test_service_menu_follows_published_services_and_links_to_their_detail(): void
     {
-        config(['company.services' => ['Layanan Uji Satu', 'Layanan Uji Dua']]);
+        $satu = Service::factory()->create(['title' => 'Layanan Uji Satu']);
+        Service::factory()->draft()->create(['title' => 'Layanan Masih Draft']);
 
         $this->get(route('home'))
             ->assertSee('Layanan Kami')
             ->assertSee('Lihat semua layanan')
             ->assertSee('Layanan Uji Satu')
-            ->assertSee('Layanan Uji Dua');
+            ->assertSee('href="'.route('services.show', $satu->slug).'"', false)
+            ->assertDontSee('Layanan Masih Draft');
+
+        Service::factory()->create(['title' => 'Layanan Uji Dua']);
+
+        $this->get(route('home'))->assertSee('Layanan Uji Dua');
     }
 
     public function test_navbar_has_no_contact_details(): void

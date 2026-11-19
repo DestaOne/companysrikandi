@@ -21,7 +21,14 @@ trait LogsActivity
             'action' => $action,
             'subject_type' => $model::class,
             'subject_id' => $model->getKey(),
+            'subject_label' => $model->activityLabel(),
             'changes' => $action === 'updated' ? $model->getChanges() : null,
         ]);
+    }
+
+    /** Nama data untuk riwayat aktivitas (mis. judul). Model boleh menimpanya. */
+    public function activityLabel(): ?string
+    {
+        return null;
     }
 }

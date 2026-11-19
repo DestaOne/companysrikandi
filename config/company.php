@@ -8,8 +8,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | Data yang tampil di footer. Setiap nilai bisa ditimpa lewat .env
-    | (COMPANY_NAME, COMPANY_PHONE, dst.). Daftar layanan di bawah adalah
-    | bidang usaha (KBLI) dan nanti diganti dengan data dari database.
+    | (COMPANY_NAME, COMPANY_PHONE, dst.). Daftar layanan tidak diatur di sini,
+    | melainkan dari menu Layanan di panel admin.
     |
     */
 
@@ -20,6 +20,9 @@ return [
     'address' => env('COMPANY_ADDRESS', 'Jalan Scarlet 3 Nomor 9, Kelurahan Selembaran Jati, Kecamatan Kosambi, Kabupaten Tangerang, Provinsi Banten'),
 
     'phone' => env('COMPANY_PHONE', '081133361090'),
+
+    // Zona waktu untuk menampilkan tanggal dan jam di panel admin (database tetap menyimpan UTC).
+    'timezone' => env('COMPANY_TIMEZONE', 'Asia/Jakarta'),
 
     'email' => env('COMPANY_EMAIL', 'dwisrikandinusantara@gmail.com'),
 
@@ -32,22 +35,12 @@ return [
     // Kosongkan (null) agar baris jam operasional tidak ditampilkan.
     'hours' => env('COMPANY_HOURS'),
 
-    // Placeholder daftar layanan di footer; nanti diganti data dari database.
-    'footer_services' => [
-        'Layanan 1',
-        'Layanan 2',
-        'Layanan 3',
-        'Layanan 4',
-    ],
-
-    'services' => [
-        'Perdagangan Besar Mesin, Peralatan dan Perlengkapan Lainnya',
-        'Perdagangan Besar Karet dan Plastik dalam Bentuk Dasar',
-        'Perdagangan Besar Peralatan Masak, Peralatan Dapur, dan Elektronik Rumah Tangga',
-        'Perdagangan Besar Komputer dan Perlengkapan Komputer',
-        'Perdagangan Besar Berbagai Macam Barang',
-        'Perdagangan Besar Alat Laboratorium, Alat Farmasi, dan Alat Kedokteran untuk Manusia',
-        'Perdagangan Besar Pakaian',
+    // Logo bawaan (path di folder public); admin bisa menggantinya lewat menu Logo.
+    'logos' => [
+        'favicon' => 'images/logo.png',
+        'navbar_logo_light' => 'images/logo-light.png',
+        'navbar_logo' => 'images/logo.png',
+        'footer_logo' => 'images/logo.png',
     ],
 
 ];

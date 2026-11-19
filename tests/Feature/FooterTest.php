@@ -2,17 +2,24 @@
 
 namespace Tests\Feature;
 
+use App\Models\Service;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class FooterTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_footer_shows_logo_description_contact_and_services(): void
     {
         config([
             'company.name' => 'PT. Contoh Nusantara',
             'company.description' => 'Deskripsi uji perusahaan.',
-            'company.footer_services' => ['Layanan Uji Satu', 'Layanan Uji Dua'],
         ]);
+
+        Service::factory()->create(['title' => 'Layanan Uji Satu']);
+        Service::factory()->create(['title' => 'Layanan Uji Dua']);
 
         $this->get(route('home'))
             ->assertOk()
@@ -30,10 +37,20 @@ class FooterTest extends TestCase
             ->assertSee('href="mailto:dwisrikandinusantara@gmail.com"', false);
     }
 
-    public function test_footer_lists_placeholder_services_by_default(): void
+    public function test_footer_lists_only_published_services_linking_to_their_page(): void
     {
+        $published = Service::factory()->create(['title' => 'Layanan Terbit']);
+        Service::factory()->draft()->create(['title' => 'Layanan Draft']);
+
         $this->get(route('home'))
-            ->assertSeeInOrder(['Layanan 1', 'Layanan 2', 'Layanan 3', 'Layanan 4']);
+            ->assertSee('Layanan Terbit')
+            ->assertSee(route('services.show', $published->slug), false)
+            ->assertDontSee('Layanan Draft');
+    }
+
+    public function test_footer_tells_when_there_are_no_services(): void
+    {
+        $this->get(route('home'))->assertSee('Belum ada layanan.');
     }
 
     public function test_phone_with_separators_becomes_link(): void
@@ -65,5 +82,35 @@ class FooterTest extends TestCase
         config(['company.hours' => 'Senin sampai Jumat, 08.00 sampai 17.00']);
 
         $this->get(route('home'))->assertSee('Senin sampai Jumat, 08.00 sampai 17.00');
+    }
+
+    public function test_footer_contact_follows_contact_edited_in_admin_about_menu(): void
+    {
+        $this->actingAs(User::factory()->create())
+            ->put(route('admin.home-sections.update', 'about-contact'), [
+                'eyebrow' => 'Kontak', 'title' => 'Hubungi Kami', 'description' => 'Siap membantu.',
+                'address' => 'Jalan Baru Nomor 7, Tangerang',
+                'phone' => '081299998888',
+                'email' => 'baru@contoh.test',
+            ]);
+        auth()->logout();
+
+        foreach ([route('home'), route('about'), route('galleries.index')] as $url) {
+            $this->get($url)
+                ->assertSee('Jalan Baru Nomor 7, Tangerang')
+                ->assertSee('href="tel:081299998888"', false)
+                ->assertSee('href="mailto:baru@contoh.test"', false)
+                ->assertDontSee('Jalan Scarlet 3 Nomor 9');
+        }
+
+    }
+
+    public function test_footer_services_flow_in_columns_of_five(): void
+    {
+        Service::factory()->count(9)->create();
+
+        $this->get(route('home'))
+            ->assertSee('md:grid-rows-5', false)
+            ->assertSee('md:grid-flow-col', false);
     }
 }

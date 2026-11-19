@@ -1,20 +1,10 @@
-{{-- Props: image (URL), title, description, index (urutan, menentukan ukuran petak pada grid) --}}
-@props(['image', 'title', 'description' => null, 'index' => 0])
-
-@php
-    // Pola 7 petak mengisi 3 baris x 4 kolom tanpa celah: besar, tinggi, lebar, dan biasa.
-    $size = match ($index % 7) {
-        0 => 'col-span-2 row-span-2',
-        3 => 'row-span-2',
-        5 => 'col-span-2',
-        default => '',
-    };
-@endphp
+{{-- Props: image (URL), title, description; ukuran petak diatur oleh x-web.gallery-grid --}}
+@props(['image', 'title', 'description' => null])
 
 <figure x-data tabindex="0" role="button" aria-label="Perbesar gambar: {{ $title }}"
         @click="$dispatch('open-image', { src: @js($image), title: @js($title) })"
         @keydown.enter.prevent="$dispatch('open-image', { src: @js($image), title: @js($title) })"
-        {{ $attributes->class(['group relative isolate cursor-zoom-in overflow-hidden bg-ink outline-none focus-visible:ring-2 focus-visible:ring-gold-500', $size]) }}>
+        {{ $attributes->class(['group relative isolate cursor-zoom-in overflow-hidden bg-ink outline-none focus-visible:ring-2 focus-visible:ring-gold-500']) }}>
     <img src="{{ $image }}" alt="{{ $title }}" loading="lazy"
          class="absolute inset-0 size-full object-cover transition duration-700 ease-out group-hover:scale-105">
 

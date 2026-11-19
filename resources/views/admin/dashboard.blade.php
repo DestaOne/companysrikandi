@@ -4,22 +4,21 @@
 
 @section('content')
     {{-- Banner sambutan: panel hitam dengan aksen emas, seperti header proyek pada referensi --}}
-    <section class="relative mb-8 overflow-hidden rounded-3xl border-2 border-gold-400 bg-linear-to-br from-ink-950 via-ink to-ink-800 px-8 py-10 text-white shadow-lg sm:px-12">
+    <section class="relative mb-5 overflow-hidden rounded-2xl border-2 border-gold-400 bg-linear-to-br from-ink-950 via-ink to-ink-800 px-4 py-6 text-white shadow-lg sm:mb-8 sm:rounded-3xl sm:px-12 sm:py-10">
         <x-web.line-backdrop class="opacity-30" />
 
         <div class="relative">
             <p class="text-xs font-semibold uppercase tracking-widest text-gold-300">{{ now()->locale('id')->translatedFormat('l, d F Y') }}</p>
-            <h1 class="mt-3 font-serif text-4xl leading-tight sm:text-5xl">Selamat datang, <span class="bg-gold-metal bg-clip-text text-transparent">{{ auth()->user()->name }}</span></h1>
-            <p class="mt-4 max-w-xl text-base leading-7 text-white">Kelola konten website {{ config('company.name') }} dari satu tempat.</p>
-            <div class="mt-6 flex flex-wrap gap-3">
-                {{-- Modul admin Layanan belum ada, jadi tombolnya nonaktif dulu --}}
-                <x-ui.button disabled title="Segera hadir" class="cursor-not-allowed">Tambah Layanan</x-ui.button>
+            <h1 class="mt-2 font-serif text-2xl leading-tight sm:mt-3 sm:text-5xl">Selamat datang, <span class="bg-gold-metal bg-clip-text text-transparent">{{ auth()->user()->name }}</span></h1>
+            <p class="mt-3 max-w-xl text-sm leading-6 sm:mt-4 sm:text-base sm:leading-7 text-white">Kelola konten website {{ config('company.name') }} dari satu tempat.</p>
+            <div class="mt-4 flex flex-wrap gap-2 sm:mt-6 sm:gap-3">
+                <x-ui.button :href="route('admin.services.create')">Tambah Layanan</x-ui.button>
                 <x-ui.button :href="route('admin.galleries.create')">Tambah Galeri</x-ui.button>
             </div>
         </div>
     </section>
 
-    <div class="grid gap-4 sm:grid-cols-3">
+    <div class="grid gap-3 sm:grid-cols-3 sm:gap-4">
         <x-admin.stat-card label="Total Layanan" :value="$counts['services']" hint="Bidang usaha yang ditampilkan">
             <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </x-admin.stat-card>
@@ -31,46 +30,49 @@
         </x-admin.stat-card>
     </div>
 
-    <div class="mt-8 grid gap-6 lg:grid-cols-5">
-        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gold-300/60 lg:col-span-3">
+    <div class="mt-5 grid gap-4 sm:mt-8 sm:gap-6 lg:grid-cols-5">
+        <section class="rounded-2xl bg-white p-4 shadow-sm sm:p-6 ring-1 ring-gold-300/60 lg:col-span-3">
             <h2 class="text-lg font-semibold">Pesan Terbaru</h2>
             <span class="bg-gold-metal mt-2 block h-0.5 w-12"></span>
 
-            <ul class="mt-4 divide-y divide-gold-100">
+            {{-- Tinggi dibatasi sekitar 6 baris; sisanya digulir di dalam kartu --}}
+            <ul class="mt-4 max-h-[26rem] divide-y divide-gold-100 overflow-y-auto overscroll-contain">
                 @forelse ($messages as $message)
-                    <li class="py-3">
-                        <div class="flex items-baseline justify-between gap-3">
-                            <p class="truncate font-medium">{{ $message->name }} <span class="text-sm font-normal text-ink-800/70">&middot; {{ $message->email }}</span></p>
-                            <time class="shrink-0 text-xs text-ink-800/70" datetime="{{ $message->created_at->toIso8601String() }}">{{ $message->created_at->locale('id')->diffForHumans() }}</time>
-                        </div>
-                        <p class="mt-1 truncate text-sm text-ink-800">{{ $message->subject }}</p>
+                    <li>
+                        <a href="{{ route('admin.messages.show', $message) }}" class="block py-3 outline-none hover:text-gold-700 focus-visible:ring-2 focus-visible:ring-gold-500">
+                            <div class="flex items-baseline justify-between gap-3">
+                                <p class="truncate font-medium">{{ $message->name }} <span class="text-sm font-normal text-ink-800/70">&middot; {{ $message->email }}</span></p>
+                                <time class="shrink-0 text-xs text-ink-800/70" datetime="{{ $message->created_at->toIso8601String() }}">{{ $message->created_at->locale('id')->diffForHumans() }}</time>
+                            </div>
+                            <p class="mt-1 truncate text-sm text-ink-800">{{ $message->subject }}</p>
+                        </a>
                     </li>
                 @empty
                     <li class="py-8 text-center text-sm text-ink-800">Belum ada pesan masuk.</li>
                 @endforelse
             </ul>
+
+            <a href="{{ route('admin.messages.index') }}" class="mt-4 inline-block text-sm font-semibold text-ink outline-none transition hover:text-gold-700 focus-visible:ring-2 focus-visible:ring-gold-500">Buka semua pesan</a>
         </section>
 
-        <section class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gold-300/60 lg:col-span-2">
-            <h2 class="text-lg font-semibold">Aktivitas Terakhir</h2>
+        <section class="rounded-2xl bg-white p-4 shadow-sm sm:p-6 ring-1 ring-gold-300/60 lg:col-span-2">
+            <h2 class="text-lg font-semibold">Layanan Belum Terbit</h2>
             <span class="bg-gold-metal mt-2 block h-0.5 w-12"></span>
 
-            <ul class="mt-4 space-y-4">
-                @forelse ($activities as $activity)
-                    <li class="flex gap-3">
-                        <span class="bg-gold-sheen mt-1.5 size-2.5 shrink-0 rounded-full"></span>
-                        <div class="min-w-0 text-sm">
-                            <p>
-                                <span class="font-medium">{{ $activity->user?->name ?? 'Pengunjung' }}</span>
-                                {{ $activity->summary }}
-                            </p>
-                            <time class="text-xs text-ink-800/70" datetime="{{ $activity->created_at->toIso8601String() }}">{{ $activity->created_at->locale('id')->diffForHumans() }}</time>
-                        </div>
+            <ul class="mt-4 max-h-[26rem] divide-y divide-gold-100 overflow-y-auto overscroll-contain">
+                @forelse ($draftServices as $service)
+                    <li>
+                        <a href="{{ route('admin.services.edit', $service) }}" class="group block py-3 outline-none focus-visible:ring-2 focus-visible:ring-gold-500">
+                            <p class="wrap-anywhere font-medium transition group-hover:text-gold-700">{{ $service->title }}</p>
+                            <p class="mt-0.5 text-xs text-ink-800/70">Diubah <time datetime="{{ $service->updated_at->toIso8601String() }}">{{ $service->updated_at->locale('id')->diffForHumans() }}</time></p>
+                        </a>
                     </li>
                 @empty
-                    <li class="py-8 text-center text-sm text-ink-800">Belum ada aktivitas.</li>
+                    <li class="py-8 text-center text-sm text-ink-800">Semua layanan sudah terbit.</li>
                 @endforelse
             </ul>
+
+            <a href="{{ route('admin.services.index') }}" class="mt-4 inline-block text-sm font-semibold text-ink outline-none transition hover:text-gold-700 focus-visible:ring-2 focus-visible:ring-gold-500">Buka daftar layanan</a>
         </section>
     </div>
 @endsection

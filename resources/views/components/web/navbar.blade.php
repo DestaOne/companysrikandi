@@ -1,4 +1,4 @@
-{{-- Navbar tetap; perilakunya (transparan, solid, menu mobile) ada di Alpine.data('navbar') di resources/js/navbar.js. Tanpa props. --}}
+{{-- Navbar tetap; menu Layanan memakai $menuServices (view composer di AppServiceProvider); perilakunya (transparan, solid, menu mobile) ada di Alpine.data('navbar') di resources/js/navbar.js. Tanpa props. --}}
 @php
     $company = config('company');
 
@@ -34,8 +34,8 @@
             {{-- Logo --}}
             <a href="{{ route('home') }}" aria-label="{{ $company['name'] }}, ke beranda" class="flex items-center {{ $focus }}">
                 {{-- Logo teks putih di atas hero (navbar transparan), logo asli saat navbar solid. --}}
-                <img src="{{ asset('images/logo-light.png') }}" alt="Logo {{ $company['name'] }}" class="group-solid/nav:hidden h-9 w-auto md:h-10">
-                <img src="{{ asset('images/logo.png') }}" alt="" class="group-solid/nav:block hidden h-9 w-auto md:h-10">
+                <img src="{{ asset($logos['navbar_logo_light']) }}" alt="Logo {{ $company['name'] }}" class="group-solid/nav:hidden h-9 w-auto md:h-10">
+                <img src="{{ asset($logos['navbar_logo']) }}" alt="" class="group-solid/nav:block hidden h-9 w-auto md:h-10">
             </a>
 
             {{-- Menu (desktop) --}}
@@ -66,14 +66,16 @@
                                             </a>
                                         </div>
                                         <ul class="grid gap-x-10 gap-y-1 sm:grid-cols-2 xl:grid-cols-3">
-                                            @foreach ($company['services'] as $service)
+                                            @forelse ($menuServices as $service)
                                                 <li>
-                                                    <a href="{{ url('/layanan') }}" class="group/svc relative block py-3 pr-2 text-[15px] font-medium leading-6 text-ink {{ $focus }}">
-                                                        {{ $service }}
+                                                    <a href="{{ route('services.show', $service->slug) }}" class="group/svc relative block py-3 pr-2 text-[15px] font-medium leading-6 text-ink {{ $focus }}">
+                                                        {{ $service->title }}
                                                         <span class="{{ $lineBase }} bg-gold-metal inset-x-0 bottom-0 scale-x-0 group-hover/svc:scale-x-100 group-focus-visible/svc:scale-x-100"></span>
                                                     </a>
                                                 </li>
-                                            @endforeach
+                                            @empty
+                                                <li class="py-3 text-[15px] font-medium text-ink-800">Belum ada layanan.</li>
+                                            @endforelse
                                         </ul>
                                     </div>
                                 </div>

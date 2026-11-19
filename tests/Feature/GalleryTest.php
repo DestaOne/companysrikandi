@@ -93,4 +93,94 @@ class GalleryTest extends TestCase
             $this->actingAs($user)->get($url)->assertOk();
         }
     }
+
+    public function test_reorder_changes_order_in_admin_grid_and_on_public_page(): void
+    {
+        [$a, $b, $c] = Gallery::factory()->count(3)->sequence(
+            ['title' => 'Foto A'], ['title' => 'Foto B'], ['title' => 'Foto C'],
+        )->create()->all();
+
+        $this->actingAs(User::factory()->create())
+            ->put(route('admin.galleries.reorder'), ['ids' => [$c->id, $a->id, $b->id]])
+            ->assertRedirect()
+            ->assertSessionMissing('success');
+
+        $this->assertSame([$c->id, $a->id, $b->id], Gallery::ordered()->pluck('id')->all());
+
+        $this->get(route('galleries.index'))->assertSeeInOrder(['Foto C', 'Foto A', 'Foto B']);
+        $this->actingAs(User::first())->get(route('admin.galleries.index'))->assertSeeInOrder(['Foto C', 'Foto A', 'Foto B']);
+    }
+
+    public function test_reorder_within_a_subset_only_swaps_their_slots_and_is_validated(): void
+    {
+        $admin = User::factory()->create();
+        [$a, $b, $c, $d] = Gallery::factory()->count(4)->create()->all();
+
+        $this->actingAs($admin)->put(route('admin.galleries.reorder'), ['ids' => [$d->id, $c->id]]);
+        $this->assertSame([$a->id, $b->id, $d->id, $c->id], Gallery::ordered()->pluck('id')->all());
+
+        $this->actingAs($admin)->put(route('admin.galleries.reorder'), ['ids' => [$a->id, 999]])->assertSessionHasErrors('ids.1');
+        $this->actingAs($admin)->put(route('admin.galleries.reorder'), [])->assertSessionHasErrors('ids');
+    }
+
+    public function test_new_image_goes_to_the_end(): void
+    {
+        Gallery::factory()->count(2)->create();
+
+        $this->actingAs(User::factory()->create())->post(route('admin.galleries.store'), [
+            'title' => 'Paling Akhir',
+            'image' => UploadedFile::fake()->image('baru.jpg'),
+        ]);
+
+        $this->assertSame('Paling Akhir', Gallery::ordered()->get()->last()->title);
+    }
+
+    public function test_admin_grid_has_add_button_and_single_edit_button_per_image(): void
+    {
+        $gallery = Gallery::factory()->create(['title' => 'Gudang']);
+
+        $this->actingAs(User::factory()->create())
+            ->get(route('admin.galleries.index'))
+            ->assertOk()
+            ->assertSee('Tambah Gambar')
+            ->assertDontSee('Ubah Nama')
+            ->assertSee(route('admin.galleries.edit', $gallery), false);
+    }
+
+    public function test_admin_renames_image_without_touching_description_or_image(): void
+    {
+        $gallery = Gallery::factory()->create(['title' => 'Lama', 'description' => 'Tetap', 'image' => 'galleries/x.jpg']);
+
+        $this->actingAs(User::factory()->create())
+            ->put(route('admin.galleries.update', $gallery), ['title' => 'Nama Baru'])
+            ->assertRedirect(route('admin.galleries.index'));
+
+        $gallery->refresh();
+        $this->assertSame('Nama Baru', $gallery->title);
+        $this->assertSame('Tetap', $gallery->description);
+        $this->assertSame('galleries/x.jpg', $gallery->image);
+    }
+
+    public function test_public_gallery_section_has_line_and_root_decoration(): void
+    {
+        Gallery::factory()->create();
+
+        $html = $this->get(route('galleries.index'))->assertOk()->getContent();
+
+        $this->assertSame(1, substr_count($html, 'vector-effect="non-scaling-stroke" d="M500 0 C380 180'));
+    }
+
+    public function test_all_images_show_on_one_page_without_pagination(): void
+    {
+        $galleries = Gallery::factory()->count(20)->create();
+
+        $this->actingAs(User::factory()->create(['activities_seen_at' => now()->addMinute()]))
+            ->get(route('admin.galleries.index'))
+            ->assertSee($galleries->last()->title)
+            ->assertDontSee('page=2');
+
+        $this->get(route('galleries.index'))
+            ->assertSee($galleries->last()->title)
+            ->assertDontSee('page=2');
+    }
 }

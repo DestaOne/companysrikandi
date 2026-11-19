@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ReorderGalleryRequest;
 use App\Http\Requests\Admin\StoreGalleryRequest;
 use App\Http\Requests\Admin\UpdateGalleryRequest;
 use App\Models\Gallery;
@@ -18,7 +19,7 @@ class GalleryController extends Controller
     public function index(): View
     {
         return view('admin.galleries.index', [
-            'galleries' => $this->galleryService->paginate(),
+            'galleries' => $this->galleryService->all(),
         ]);
     }
 
@@ -58,6 +59,20 @@ class GalleryController extends Controller
 
         return redirect()->route('admin.galleries.index')
             ->with('success', 'Galeri berhasil diperbarui.');
+    }
+
+    public function reorder(ReorderGalleryRequest $request): RedirectResponse
+    {
+        try {
+            $this->galleryService->reorder($request->validated('ids'));
+        } catch (Throwable $e) {
+            report($e);
+
+            return back()->with('error', 'Gagal menyimpan urutan galeri.');
+        }
+
+        // Tanpa pesan sukses: hasilnya sudah terlihat di grid, dan pesan akan menggeser posisi halaman
+        return back();
     }
 
     public function destroy(Gallery $gallery): RedirectResponse

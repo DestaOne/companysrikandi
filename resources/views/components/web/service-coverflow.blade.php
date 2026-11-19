@@ -1,8 +1,8 @@
-{{-- Props: items (title, summary, image), href, moreLabel --}}
-@props(['items', 'href', 'moreLabel' => 'Lihat Layanan Selengkapnya'])
+{{-- Props: items (title, summary, image), href, moreLabel, autoplay (false = tidak berputar sendiri, untuk pratinjau) --}}
+@props(['items', 'href', 'moreLabel' => 'Lihat Layanan Selengkapnya', 'autoplay' => true])
 
 {{-- Carousel coverflow (diatur Alpine.data('coverflow') di resources/js/coverflow.js). Berputar sendiri, berhenti saat kursor atau fokus ada di dalamnya, bisa digeser dengan tombol, panah keyboard, atau klik kartu samping. --}}
-<div x-data="coverflow({{ count($items) + 1 }})" @pointerenter="stop()" @pointerleave="play()" @focusin="stop()" @focusout="play()"
+<div x-data="coverflow({{ count($items) + 1 }}, @js($autoplay))" @pointerenter="stop()" @pointerleave="play()" @focusin="stop()" @focusout="play()"
      @keydown.left.prevent="go(-1)" @keydown.right.prevent="go(1)"
      role="region" aria-roledescription="carousel" aria-label="Layanan kami" {{ $attributes->class('relative') }}>
     <div class="relative mx-auto h-[calc(var(--card-w)*var(--card-r)+4rem)] [--card-r:1.35] [--card-w:16rem] sm:[--card-r:0.625] sm:[--card-w:clamp(18rem,30vw,36rem)] overflow-hidden [perspective:1400px]">

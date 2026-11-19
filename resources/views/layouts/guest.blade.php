@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin') | {{ config('company.name') }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" href="{{ asset($logos['favicon']) }}">
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -17,7 +17,7 @@
     </div>
 
     <a href="{{ route('home') }}" class="relative flex items-center gap-3 text-sm font-bold tracking-tight">
-        <img src="{{ asset('images/logo.png') }}" alt="" class="h-8 w-auto">
+        <img src="{{ asset($logos['navbar_logo']) }}" alt="" class="h-8 w-auto">
         {{ config('company.name') }}
     </a>
 

@@ -4,31 +4,25 @@
 
 @section('content')
     <x-admin.page-header title="Galeri">
-        <x-ui.button :href="route('admin.galleries.create')">Tambah Galeri</x-ui.button>
+        <x-ui.button variant="secondary" :href="route('galleries.index')" target="_blank" rel="noopener noreferrer">Lihat Halaman</x-ui.button>
+        <x-ui.button :href="route('admin.galleries.create')">Tambah Gambar</x-ui.button>
     </x-admin.page-header>
 
-    <x-admin.table>
-        <x-slot:head>
-            <tr>
-                <th class="px-4 py-3">Gambar</th>
-                <th class="px-4 py-3">Judul</th>
-                <th class="px-4 py-3 text-right">Aksi</th>
-            </tr>
-        </x-slot:head>
+    <p class="-mt-3 mb-6 text-sm text-ink-800">Seret gambar untuk memindahkan posisinya. Urutan dan ukuran petak sama seperti di halaman Galeri website.</p>
 
-        @forelse ($galleries as $gallery)
-            <tr>
-                <td class="px-4 py-3"><img src="{{ asset('storage/'.$gallery->image) }}" alt="" class="h-12 w-20 rounded object-cover"></td>
-                <td class="px-4 py-3 font-medium">{{ $gallery->title }}</td>
-                <td class="flex justify-end gap-4 px-4 py-3">
-                    <a href="{{ route('admin.galleries.edit', $gallery) }}" class="text-sm font-medium text-gold-700 hover:underline">Ubah</a>
-                    <x-ui.confirm-delete :action="route('admin.galleries.destroy', $gallery)" :name="'delete-gallery-'.$gallery->id" />
-                </td>
-            </tr>
-        @empty
-            <tr><td colspan="3" class="px-4 py-8 text-center text-ink-800">Belum ada galeri.</td></tr>
-        @endforelse
-    </x-admin.table>
+    @if ($galleries->isEmpty())
+        <p class="bg-white px-4 py-10 text-center text-ink-800 ring-1 ring-gold-300/60">Belum ada gambar. Klik Tambah Gambar untuk memulai.</p>
+    @else
+        <x-admin.sortable-grid :reorder="route('admin.galleries.reorder')">
+            @foreach ($galleries as $gallery)
+                <x-admin.gallery-tile
+                    :id="$gallery->id"
+                    :image="asset('storage/'.$gallery->image)"
+                    :title="$gallery->title"
+                    :edit="route('admin.galleries.edit', $gallery)"
+                    :delete="route('admin.galleries.destroy', $gallery)" />
+            @endforeach
+        </x-admin.sortable-grid>
 
-    <div class="mt-4">{{ $galleries->links() }}</div>
+    @endif
 @endsection

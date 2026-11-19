@@ -19,31 +19,12 @@ return [
         'image' => 'images/home/hero.jpg',
     ],
 
+    // Empat kartu layanan dipilih admin dari daftar Layanan (menyimpan id layanan).
+    // Bila belum dipilih, empat layanan terbit pertama yang dipakai.
     'services' => [
         'eyebrow' => 'Layanan Kami',
         'title' => 'Bidang Usaha yang Kami Layani',
-        'items' => [
-            [
-                'title' => 'Mesin dan Peralatan',
-                'summary' => 'Perdagangan besar mesin, peralatan, dan perlengkapan penunjang usaha.',
-                'image' => 'images/home/layanan-mesin.jpg',
-            ],
-            [
-                'title' => 'Karet dan Plastik',
-                'summary' => 'Karet dan plastik dalam bentuk dasar untuk kebutuhan produksi.',
-                'image' => 'images/home/layanan-karet-plastik.jpg',
-            ],
-            [
-                'title' => 'Komputer dan Perlengkapan',
-                'summary' => 'Komputer beserta perlengkapannya untuk kebutuhan kantor dan usaha.',
-                'image' => 'images/home/layanan-komputer.jpg',
-            ],
-            [
-                'title' => 'Alat Laboratorium dan Kedokteran',
-                'summary' => 'Alat laboratorium, farmasi, dan kedokteran untuk manusia.',
-                'image' => 'images/home/layanan-laboratorium.jpg',
-            ],
-        ],
+        'service_ids' => [],
     ],
 
     // Empat keunggulan: panel foto yang melebar saat di-hover; panel pertama terbuka lebih dulu.

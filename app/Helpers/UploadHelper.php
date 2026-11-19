@@ -20,4 +20,15 @@ class UploadHelper
             Storage::disk('public')->delete($path);
         }
     }
+
+    /**
+     * Hapus file dari path berawalan "storage/" (hasil upload). Gambar bawaan di
+     * public/images tidak disentuh.
+     */
+    public static function deleteUrl(?string $url): void
+    {
+        if ($url && str_starts_with($url, 'storage/')) {
+            self::delete(substr($url, strlen('storage/')));
+        }
+    }
 }
