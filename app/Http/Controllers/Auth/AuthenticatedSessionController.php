@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\LoginThrottleService;
+use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +13,10 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
-    public function __construct(private LoginThrottleService $throttle) {}
+    public function __construct(
+        private LoginThrottleService $throttle,
+        private UserService $userService,
+    ) {}
 
     public function create(Request $request): View
     {
@@ -26,6 +30,7 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate($this->throttle);
         $request->session()->regenerate();
+        $this->userService->recordLogin($request->user());
 
         // Penanda sesi "ingat saya"; hilang sendiri saat logout karena sesi dihapus
         $request->session()->put('remember_me', $request->boolean('remember'));
@@ -35,6 +40,10 @@ class AuthenticatedSessionController extends Controller
 
     public function destroy(Request $request): RedirectResponse
     {
+        if ($request->user()) {
+            $this->userService->recordLogout($request->user());
+        }
+
         Auth::guard('web')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

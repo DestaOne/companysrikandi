@@ -48,6 +48,15 @@ class ActivityTest extends TestCase
         $this->get(route('admin.activities.index'))->assertSee('Menghapus gambar galeri “Foto Gudang”');
     }
 
+    public function test_other_user_changes_are_not_recorded(): void
+    {
+        $admin = User::factory()->create();
+
+        $admin->update(['name' => 'Nama Baru', 'activities_seen_at' => now()]);
+
+        $this->assertDatabaseCount('activity_logs', 0);
+    }
+
     public function test_login_and_logout_are_recorded(): void
     {
         $admin = User::factory()->create(['name' => 'Budi Admin', 'email' => 'budi@example.com']);

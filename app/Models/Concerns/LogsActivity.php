@@ -14,8 +14,14 @@ trait LogsActivity
         static::deleted(fn (Model $model) => static::logActivity($model, 'deleted'));
     }
 
-    protected static function logActivity(Model $model, string $action): void
+    protected static function logActivity(Model $model, string $event): void
     {
+        $action = $model->activityActionFor($event);
+
+        if ($action === null) {
+            return;
+        }
+
         ActivityLog::create([
             'user_id' => auth()->id(),
             'action' => $action,
@@ -24,6 +30,15 @@ trait LogsActivity
             'subject_label' => $model->activityLabel(),
             'changes' => $action === 'updated' ? $model->getChanges() : null,
         ]);
+    }
+
+    /**
+     * Nama aksi yang dicatat untuk event model (created/updated/deleted); null berarti tidak dicatat.
+     * Model boleh menimpanya, mis. User mengubah pembaruan kolom waktu masuk menjadi "login".
+     */
+    public function activityActionFor(string $event): ?string
+    {
+        return $event;
     }
 
     /** Nama data untuk riwayat aktivitas (mis. judul). Model boleh menimpanya. */
