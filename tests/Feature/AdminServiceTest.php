@@ -156,7 +156,7 @@ class AdminServiceTest extends TestCase
 
         $this->actingAs(User::factory()->create())
             ->put(route('admin.services.reorder'), ['ids' => [$c->id, $a->id, $b->id]])
-            ->assertRedirect();
+            ->assertNoContent();
 
         $this->assertSame([$c->id, $a->id, $b->id], Service::ordered()->pluck('id')->all());
 

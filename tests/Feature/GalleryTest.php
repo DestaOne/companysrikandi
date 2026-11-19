@@ -102,8 +102,7 @@ class GalleryTest extends TestCase
 
         $this->actingAs(User::factory()->create())
             ->put(route('admin.galleries.reorder'), ['ids' => [$c->id, $a->id, $b->id]])
-            ->assertRedirect()
-            ->assertSessionMissing('success');
+            ->assertNoContent();
 
         $this->assertSame([$c->id, $a->id, $b->id], Gallery::ordered()->pluck('id')->all());
 

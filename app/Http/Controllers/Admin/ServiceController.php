@@ -12,6 +12,7 @@ use App\Models\Service;
 use App\Services\HomeContentService;
 use App\Services\ServiceCatalogService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Throwable;
 
@@ -72,7 +73,7 @@ class ServiceController extends Controller
             ->with('success', 'Layanan berhasil diperbarui.');
     }
 
-    public function reorder(ReorderServiceRequest $request): RedirectResponse
+    public function reorder(ReorderServiceRequest $request): RedirectResponse|Response
     {
         try {
             $this->serviceCatalogService->reorder($request->validated('ids'));
@@ -82,8 +83,8 @@ class ServiceController extends Controller
             return back()->with('error', 'Gagal menyimpan urutan layanan.');
         }
 
-        // Tanpa pesan sukses: hasilnya sudah terlihat di tabel, dan pesan akan menggeser posisi halaman
-        return back();
+        // Dikirim ke iframe tersembunyi (lihat sortableRows.js): sukses cukup 204 tanpa isi, halaman admin tidak berpindah
+        return response()->noContent();
     }
 
     public function destroy(Service $service): RedirectResponse

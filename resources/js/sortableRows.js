@@ -1,26 +1,21 @@
 // Item ber-atribut data-id (baris tabel atau petak grid) yang bisa diseret untuk mengubah urutan.
-// Setelah dilepas, urutan id dikirim lewat form biasa (tanpa fetch); komponen pembungkus menyediakan
+// Setelah dilepas, urutan id dikirim lewat form ke iframe tersembunyi (tanpa fetch dan tanpa memuat ulang halaman); komponen pembungkus menyediakan
 // x-ref "rows", "form", dan "ids". axis 'y' untuk daftar vertikal (tabel), 'x' untuk petak grid.
 export default (axis = 'y') => ({
     dragging: null,
     before: '',
 
     init() {
-        this.restoreScroll();
         this.$refs.rows.querySelectorAll('[data-id]').forEach((row) => (row.draggable = true));
     },
 
-    // Form dikirim biasa (halaman dimuat ulang), jadi posisi gulir disimpan lalu dipulihkan agar tidak kembali ke atas.
-    restoreScroll() {
-        try {
-            const y = sessionStorage.getItem('sortableScroll');
+    // Sukses: iframe menerima 204 (kosong), tidak ada yang perlu dilakukan. Gagal: iframe berisi halaman dengan
+    // popup error; popup itu disalin ke halaman utama agar admin tahu urutan tidak tersimpan.
+    saved(frame) {
+        const popup = frame.contentDocument?.querySelector('[role="alertdialog"]')?.parentElement;
 
-            if (y !== null) {
-                sessionStorage.removeItem('sortableScroll');
-                window.scrollTo(0, Number(y));
-            }
-        } catch {
-            // penyimpanan peramban dinonaktifkan: biarkan di atas
+        if (popup) {
+            document.body.append(document.importNode(popup, true));
         }
     },
 
@@ -74,12 +69,6 @@ export default (axis = 'y') => ({
                 return input;
             }),
         );
-
-        try {
-            sessionStorage.setItem('sortableScroll', String(window.scrollY));
-        } catch {
-            // abaikan bila penyimpanan tidak tersedia
-        }
 
         this.$refs.form.requestSubmit();
     },

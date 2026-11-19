@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\UpdateGalleryRequest;
 use App\Models\Gallery;
 use App\Services\GalleryService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 use Throwable;
 
@@ -61,7 +62,7 @@ class GalleryController extends Controller
             ->with('success', 'Galeri berhasil diperbarui.');
     }
 
-    public function reorder(ReorderGalleryRequest $request): RedirectResponse
+    public function reorder(ReorderGalleryRequest $request): RedirectResponse|Response
     {
         try {
             $this->galleryService->reorder($request->validated('ids'));
@@ -71,8 +72,8 @@ class GalleryController extends Controller
             return back()->with('error', 'Gagal menyimpan urutan galeri.');
         }
 
-        // Tanpa pesan sukses: hasilnya sudah terlihat di grid, dan pesan akan menggeser posisi halaman
-        return back();
+        // Dikirim ke iframe tersembunyi (lihat sortableRows.js): sukses cukup 204 tanpa isi, halaman admin tidak berpindah
+        return response()->noContent();
     }
 
     public function destroy(Gallery $gallery): RedirectResponse
