@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\HomeSectionKey;
+use App\Helpers\MessageHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ReorderServiceRequest;
 use App\Http\Requests\Admin\SearchServiceRequest;
@@ -47,11 +48,11 @@ class ServiceController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->withInput()->with('error', 'Gagal menyimpan layanan.');
+            return back()->withInput()->with(MessageHelper::error('Layanan'));
         }
 
         return redirect()->route('admin.services.index')
-            ->with('success', 'Layanan berhasil ditambahkan.');
+            ->with(MessageHelper::success('Layanan'));
     }
 
     public function edit(Service $service): View
