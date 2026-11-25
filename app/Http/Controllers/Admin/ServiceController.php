@@ -48,11 +48,11 @@ class ServiceController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->withInput()->with(MessageHelper::error('Layanan'));
+            return back()->withInput()->with(MessageHelper::error('Gagal menyimpan layanan.'));
         }
 
         return redirect()->route('admin.services.index')
-            ->with(MessageHelper::success('Layanan'));
+            ->with(MessageHelper::success('Layanan berhasil ditambahkan.'));
     }
 
     public function edit(Service $service): View
@@ -67,11 +67,11 @@ class ServiceController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->withInput()->with('error', 'Gagal memperbarui layanan.');
+            return back()->withInput()->with(MessageHelper::error('Gagal memperbarui layanan.'));
         }
 
         return redirect()->route('admin.services.index')
-            ->with('success', 'Layanan berhasil diperbarui.');
+            ->with(MessageHelper::success('Layanan berhasil diperbarui.'));
     }
 
     public function reorder(ReorderServiceRequest $request): RedirectResponse|Response
@@ -81,7 +81,7 @@ class ServiceController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->with('error', 'Gagal menyimpan urutan layanan.');
+            return back()->with(MessageHelper::error('Gagal menyimpan urutan layanan.'));
         }
 
         // Dikirim ke iframe tersembunyi (lihat sortableRows.js): sukses cukup 204 tanpa isi, halaman admin tidak berpindah
@@ -95,10 +95,10 @@ class ServiceController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->with('error', 'Gagal menghapus layanan.');
+            return back()->with(MessageHelper::error('Gagal menghapus layanan.'));
         }
 
         return redirect()->route('admin.services.index')
-            ->with('success', 'Layanan berhasil dihapus.');
+            ->with(MessageHelper::success('Layanan berhasil dihapus.'));
     }
 }

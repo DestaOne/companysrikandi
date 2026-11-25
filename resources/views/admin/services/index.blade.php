@@ -51,11 +51,11 @@
                     </span>
                 </td>
                 <td class="px-4 py-4"><img src="{{ asset($service->image) }}" alt="{{ $service->title }}" class="h-16 w-24 rounded-md object-cover ring-1 ring-gold-300/60"></td>
-                <td class="max-w-xs px-4 py-4">
+                <td class="max-w-xs px-4 py-4 wrap-anywhere">
                     <p class="font-semibold leading-snug text-ink">{{ $service->title }}</p>
                     <a href="{{ route('services.show', $service->slug) }}" target="_blank" rel="noopener noreferrer" class="mt-1 inline-block text-xs text-gold-700 hover:underline">/layanan/{{ $service->slug }}</a>
                 </td>
-                <td class="max-w-sm px-4 py-4 leading-6 text-ink-800">{{ Str::limit($service->description, 110) }}</td>
+                <td class="max-w-sm px-4 py-4 leading-6 text-ink-800 wrap-anywhere">{{ Str::limit($service->description, 110) }}</td>
                 <td class="px-4 py-4 text-center"><x-ui.badge :variant="$service->status === \App\Enums\ServiceStatus::Published ? 'success' : 'default'">{{ $service->status->label() }}</x-ui.badge></td>
                 <td class="px-4 py-4">
                     <div class="flex items-center justify-end gap-3">

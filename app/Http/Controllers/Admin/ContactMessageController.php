@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\MessageHelper;
 use App\Http\Controllers\Controller;
 use App\Models\ContactMessage;
 use App\Services\ContactMessageService;
@@ -35,9 +36,9 @@ class ContactMessageController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->with('error', 'Gagal menghapus pesan.');
+            return back()->with(MessageHelper::error('Gagal menghapus pesan.'));
         }
 
-        return redirect()->route('admin.messages.index')->with('success', 'Pesan berhasil dihapus.');
+        return redirect()->route('admin.messages.index')->with(MessageHelper::success('Pesan berhasil dihapus.'));
     }
 }

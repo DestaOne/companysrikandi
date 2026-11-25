@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\HomeSectionKey;
+use App\Helpers\MessageHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateHomeSectionItemRequest;
 use App\Http\Requests\Admin\UpdateHomeSectionRequest;
@@ -56,7 +57,7 @@ class HomeSectionController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->withInput()->with('error', 'Gagal menyimpan perubahan.');
+            return back()->withInput()->with(MessageHelper::error('Gagal menyimpan perubahan.'));
         }
 
         // Section berkartu kembali ke daftar kartunya
@@ -64,7 +65,7 @@ class HomeSectionController extends Controller
             ? route('admin.home-sections.edit', $homeSection)
             : route($homeSection->indexRoute());
 
-        return redirect($target)->with('success', $homeSection->label().' berhasil diperbarui.');
+        return redirect($target)->with(MessageHelper::success($homeSection->label().' berhasil diperbarui.'));
     }
 
     public function editItem(HomeSectionKey $homeSection, int $index): View
@@ -87,10 +88,10 @@ class HomeSectionController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->withInput()->with('error', 'Gagal menyimpan perubahan.');
+            return back()->withInput()->with(MessageHelper::error('Gagal menyimpan perubahan.'));
         }
 
         return redirect()->route('admin.home-sections.edit', $homeSection)
-            ->with('success', 'Kartu '.($index + 1).' berhasil diperbarui.');
+            ->with(MessageHelper::success('Kartu '.($index + 1).' berhasil diperbarui.'));
     }
 }

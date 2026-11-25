@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\MessageHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ReorderGalleryRequest;
 use App\Http\Requests\Admin\StoreGalleryRequest;
@@ -36,11 +37,11 @@ class GalleryController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->withInput()->with('error', 'Gagal menyimpan galeri.');
+            return back()->withInput()->with(MessageHelper::error('Gagal menyimpan galeri.'));
         }
 
         return redirect()->route('admin.galleries.index')
-            ->with('success', 'Galeri berhasil ditambahkan.');
+            ->with(MessageHelper::success('Galeri berhasil ditambahkan.'));
     }
 
     public function edit(Gallery $gallery): View
@@ -55,11 +56,11 @@ class GalleryController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->withInput()->with('error', 'Gagal memperbarui galeri.');
+            return back()->withInput()->with(MessageHelper::error('Gagal memperbarui galeri.'));
         }
 
         return redirect()->route('admin.galleries.index')
-            ->with('success', 'Galeri berhasil diperbarui.');
+            ->with(MessageHelper::success('Galeri berhasil diperbarui.'));
     }
 
     public function reorder(ReorderGalleryRequest $request): RedirectResponse|Response
@@ -69,7 +70,7 @@ class GalleryController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->with('error', 'Gagal menyimpan urutan galeri.');
+            return back()->with(MessageHelper::error('Gagal menyimpan urutan galeri.'));
         }
 
         // Dikirim ke iframe tersembunyi (lihat sortableRows.js): sukses cukup 204 tanpa isi, halaman admin tidak berpindah
@@ -83,10 +84,10 @@ class GalleryController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->with('error', 'Gagal menghapus galeri.');
+            return back()->with(MessageHelper::error('Gagal menghapus galeri.'));
         }
 
         return redirect()->route('admin.galleries.index')
-            ->with('success', 'Galeri berhasil dihapus.');
+            ->with(MessageHelper::success('Galeri berhasil dihapus.'));
     }
 }

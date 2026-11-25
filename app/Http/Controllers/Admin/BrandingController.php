@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\HomeSectionKey;
+use App\Helpers\MessageHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateBrandingRequest;
 use App\Services\HomeContentService;
@@ -31,10 +32,10 @@ class BrandingController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->with('error', 'Gagal menyimpan logo.');
+            return back()->with(MessageHelper::error('Gagal menyimpan logo.'));
         }
 
-        return redirect()->route('admin.branding.edit')->with('success', 'Logo berhasil diperbarui.');
+        return redirect()->route('admin.branding.edit')->with(MessageHelper::success('Logo berhasil diperbarui.'));
     }
 
     public function reset(string $field): RedirectResponse
@@ -47,9 +48,9 @@ class BrandingController extends Controller
         } catch (Throwable $e) {
             report($e);
 
-            return back()->with('error', 'Gagal mengembalikan logo.');
+            return back()->with(MessageHelper::error('Gagal mengembalikan logo.'));
         }
 
-        return redirect()->route('admin.branding.edit')->with('success', $fields[$field]['label'].' dikembalikan ke bawaan.');
+        return redirect()->route('admin.branding.edit')->with(MessageHelper::success($fields[$field]['label'].' dikembalikan ke bawaan.'));
     }
 }
