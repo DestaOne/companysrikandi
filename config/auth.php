@@ -135,12 +135,12 @@ return [
     |--------------------------------------------------------------------------
     |
     | Admin otomatis keluar bila tidak ada aktivitas (gerak mouse, klik,
-    | ketik, scroll) selama idle_timeout detik (1200 = 20 menit). Tidak
+    | ketik, scroll) selama idle_timeout detik (1800 = 30 menit). Tidak
     | berlaku bila admin login dengan "Ingat saya". Batas di luar tab
     | mengikuti SESSION_LIFETIME (120 menit).
     |
     */
 
-    'idle_timeout' => 1200,
+    'idle_timeout' => 1800,
 
 ];
